@@ -1,0 +1,14 @@
+{
+  "name": "loft",
+  "version": "1.0.0",
+  "description": "Group apartment finder",
+  "main": "app.js",
+  "scripts": {
+    "test": "node app.js"
+  },
+  "author": "Matthew Meinzer",
+  "license": "ISC",
+  "dependencies": {
+    "puppeteer": "^1.2.0"
+  }
+}
