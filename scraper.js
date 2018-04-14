@@ -1,5 +1,5 @@
 const rp = require('request-promise');
-const cheerio = require('cheerio');
+const { JSDOM } = require('jsdom');
 
 function getAptDataFromUrl(url, done) {
     const data = {}
@@ -8,26 +8,22 @@ function getAptDataFromUrl(url, done) {
         {target: 'address', str: '.propertyAddress > h2'},
         {target: 'neighborhood', str: 'a.neighborhood'}
     ]
-
     const rpOptions = {
         uri: url,
-        transform: body => cheerio.load(body)
+        transform: body => new JSDOM(body)
     }
     rp(rpOptions)
-        .then($ => {
+        .then(dom => {
+            const doc = dom.window.document
             selectors.forEach(sel => {
-                const val = $(sel.str)
-                    .first().contents().text()
-                    .replace(/^([\n\r\s]+)(\w)/, '$2')
-                    .replace(/[\n]+/g, '')
-                    .replace(/[\r\s]+/g, ' ')
-                    .replace(/[\r\s]$/, '')
-                data[sel.target] = val
+                data[sel.target] = doc.querySelector(sel.str).textContent
+                    .trim()
+                    .replace(/([\s]+)/g, ' ');
             })
             done(data)
         })
         .catch(err => {
-            console.log(err)
+            console.error(err)
         })
 };
 
