@@ -1,18 +1,8 @@
 const rp = require('request-promise');
 const cheerio = require('cheerio');
 
-// const aptUrl = 'https://www.apartments.com/talo-minneapolis-mn/cpmckfd/'
-// function logIt(data) {
-//     console.log(data)
-// }
-// getDataFromUrl(aptUrl, logIt)
-
-function getDataFromUrl(url, done) {
-    const data = {
-        name: '',
-        address: '',
-        neighborhood: ''
-    }
+function getAptDataFromUrl(url, done) {
+    const data = {}
     const selectors = [
         {target: 'name', str: '.propertyName'},
         {target: 'address', str: '.propertyAddress > h2'},
@@ -26,7 +16,8 @@ function getDataFromUrl(url, done) {
     rp(rpOptions)
         .then($ => {
             selectors.forEach(sel => {
-                const val = $(sel.str).first().contents().text()
+                const val = $(sel.str)
+                    .first().contents().text()
                     .replace(/^([\n\r\s]+)(\w)/, '$2')
                     .replace(/[\n]+/g, '')
                     .replace(/[\r\s]+/g, ' ')
@@ -40,4 +31,4 @@ function getDataFromUrl(url, done) {
         })
 };
 
-exports.scrapeAptDataFromUrl = getDataFromUrl;
+exports.getAptData = getAptDataFromUrl;
