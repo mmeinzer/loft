@@ -1,9 +1,8 @@
-const scraper = require('./scraper');
+const scraper = require('./scraper')
 
-const url = 'https://www.apartments.com/walden-wood-saint-louis-park-mn/y1zh26t/'
+const url = 'https://www.apartments.com/east-village-apartments-minneapolis-mn/m27vx2l/'
+scraper.getAptData(url, dataHandle)
 
-scraper.scrapeAptDataFromUrl(url, logIt)
-
-function logIt(aptData) {
-    console.log(`${aptData.name} apartments are located in ${aptData.neighborhood}`)
+function dataHandle(data) {
+    console.log(data.name, data.address, data.neighborhood)
 }
