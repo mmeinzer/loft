@@ -21,9 +21,9 @@ function getAptDataFromUrl(url, done) {
                     data[item.target] = []
                     doc.querySelectorAll('.rentalGridRow').forEach(unitEle => {
                         const unit = {
-                            rent: unitEle.dataset.maxrent,
-                            beds: unitEle.dataset.beds,
-                            baths: unitEle.dataset.baths,
+                            rent: Number(unitEle.dataset.maxrent),
+                            beds: Number(unitEle.dataset.beds),
+                            baths: Number(unitEle.dataset.baths),
                             avail: unitEle.querySelector('.available').textContent.trim()
                         }
                         data[item.target].push(unit) 
