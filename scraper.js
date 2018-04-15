@@ -3,10 +3,11 @@ const { JSDOM } = require('jsdom');
 
 function getAptDataFromUrl(url, done) {
     const data = {}
-    const selectors = [
-        {target: 'name', str: '.propertyName'},
-        {target: 'address', str: '.propertyAddress > h2'},
-        {target: 'neighborhood', str: 'a.neighborhood'}
+    const dataToGet = [
+        {target: 'name', sel: '.propertyName'},
+        {target: 'address', sel: '.propertyAddress > h2'},
+        {target: 'neighborhood', sel: 'a.neighborhood'},
+        {target: 'units'}
     ]
     const rpOptions = {
         uri: url,
@@ -15,10 +16,23 @@ function getAptDataFromUrl(url, done) {
     rp(rpOptions)
         .then(dom => {
             const doc = dom.window.document
-            selectors.forEach(sel => {
-                data[sel.target] = doc.querySelector(sel.str).textContent
-                    .trim()
-                    .replace(/([\s]+)/g, ' ');
+            dataToGet.forEach(item => {
+                if (item.target === 'units') {
+                    data[item.target] = []
+                    doc.querySelectorAll('.rentalGridRow').forEach(unitEle => {
+                        const unit = {
+                            rent: unitEle.dataset.maxrent,
+                            beds: unitEle.dataset.beds,
+                            baths: unitEle.dataset.baths,
+                            avail: unitEle.querySelector('.available').textContent.trim()
+                        }
+                        data[item.target].push(unit) 
+                    })
+                } else {
+                    data[item.target] = doc.querySelector(item.sel).textContent
+                        .trim()
+                        .replace(/([\s]+)/g, ' ');
+                }
             })
             done(data)
         })
