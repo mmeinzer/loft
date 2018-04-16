@@ -33,9 +33,10 @@ function getAptDataFromUrl(url, done) {
             }
           });
         } else {
-          data[item.target] = doc.querySelector(item.sel).textContent
+          const dataValue = doc.querySelector(item.sel).textContent
             .trim()
             .replace(/([\s]+)/g, ' ');
+          data[item.target] = dataValue;
         }
       });
       done(data);
