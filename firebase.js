@@ -1,6 +1,7 @@
 const admin = require('firebase-admin');
 const serviceAccount = require('./serviceAccountKey.json');
-const { URL } = require('url');
+
+const { getAptData } = require('./scraper');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -10,20 +11,30 @@ admin.initializeApp({
 const database = admin.database();
 
 function writeAptData(aptData) {
-  const {
-    aptUrl, name, address, neighborhood, units,
-  } = aptData;
-  const url = new URL(aptUrl);
-  const hostname = url.hostname.replace(/\./g, '%2E');
-  const pathname = url.pathname.replace(/\//g, '%2F');
-  database.ref(`apartments/${hostname}${pathname}`).set({
-    aptUrl,
-    name,
-    address,
-    neighborhood,
-    units,
-  });
+  if (aptData) {
+    const {
+      aptUrl, name, address, neighborhood, units,
+    } = aptData;
+    const allApartments = database.ref('allApartments');
+    allApartments.push({
+      aptUrl,
+      name,
+      address,
+      neighborhood,
+      units,
+    });
+  }
+}
+
+function monitorAndFetchData() {
+  function handleChange(snapshot) {
+    const value = snapshot.val();
+    // const { key } = snapshot;
+    getAptData(value.url, writeAptData);
+  }
+  const localApts = database.ref('apts');
+  localApts.on('child_added', handleChange);
 }
 
 exports.writeAptData = writeAptData;
-exports.database = database;
+exports.monitorAndFetchData = monitorAndFetchData;
