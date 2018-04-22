@@ -68,3 +68,6 @@ db
 
 # firebase admin
 serviceAccountKey.json
+
+# frontend
+frontend
