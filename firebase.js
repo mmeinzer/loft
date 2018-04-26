@@ -30,9 +30,9 @@ function writeAptData(aptData) {
 function monitorAndFetchData() {
   function handleChange(snapshot) {
     const value = snapshot.val();
-    // const { key } = snapshot;
     getAptData(value.url, writeAptData);
   }
+
   const localApts = database.ref('apts');
   localApts.on('child_added', handleChange);
 }
