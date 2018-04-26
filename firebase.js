@@ -13,15 +13,16 @@ const database = admin.database();
 function writeAptData(aptData) {
   if (aptData) {
     const {
-      aptUrl, name, address, neighborhood, units,
+      url, name, address, neighborhood, units, updated,
     } = aptData;
     const allApartments = database.ref('allApartments');
     allApartments.push({
-      aptUrl,
+      url,
       name,
       address,
       neighborhood,
       units,
+      updated,
     });
   }
 }

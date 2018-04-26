@@ -5,7 +5,7 @@ function getAptDataFromUrl(url, done) {
   const urlRe = /https?:\/\/www.apartments.com\/.+\/.+/;
   if (urlRe.test(url)) {
     const data = {};
-    data.aptUrl = url;
+    data.url = url;
     const dataToGet = [
       { target: 'name', sel: '.propertyName' },
       { target: 'address', sel: '.propertyAddress > h2' },
@@ -44,6 +44,7 @@ function getAptDataFromUrl(url, done) {
             data[item.target] = dataValue;
           }
         });
+        data.updated = new Date().toJSON();
         done(data);
       })
       .catch((err) => {
