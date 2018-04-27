@@ -9,7 +9,7 @@ function getAptDataFromUrl(url, done) {
     const dataToGet = [
       { target: 'name', sel: '.propertyName' },
       { target: 'address', sel: '.propertyAddress > h2' },
-      { target: 'neighborhood', sel: 'a.neighborhood' },
+      { target: 'neighborhood', sel: '.neighborhoodAddress > .neighborhood + .neighborhood' },
       { target: 'units' },
     ];
     const rpOptions = {

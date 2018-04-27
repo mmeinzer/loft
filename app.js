@@ -1,3 +1,3 @@
 const firebase = require('./firebase');
 
-firebase.monitorAndFetchData();
+firebase.initializeDataUtilities();
