@@ -46,8 +46,8 @@ function initializeDataUtilities() {
     console.log('Calling handleAllDataAdd...');
     const value = snapshot.val();
     const key = urlToKeyMap[value.url];
-    clientData.child(key).update(value);
-    // aptRef.off()
+    console.log('key is', key)
+    if (key) {clientData.child(key).update(value)};
   }
 
   console.log('Adding event listeners...');
